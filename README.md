@@ -50,32 +50,31 @@ that uses the `moment.js` library:
 
 1. In your application directory, create a `transforms/moment.js` file.
 2. Write this code:
+    ```javascript
+    /* global moment */
 
-  ```javascript
-  /* global moment */
+    export default {
+      serialize(context, options, value) {
+        return moment(value).toISOString();
+      },
 
-  export default {
-    serialize(context, options, value) {
-      return moment(value).toISOString();
-    },
-
-    deserialize(context, options, value) {
-      return moment(value, options.parseFormat);
-    }
-  };
-  ```
+      deserialize(context, options, value) {
+        return moment(value, options.parseFormat);
+      }
+    };
+    ```
 
 3. Meanwhile, on Mele Island (TM)...
 
-  ```javascript
-  User = Ohm.Model.extend({
-    createdAt: Ohm.attr('momentjs', {parseFormat: 'MM-DD-YY'})
-  });
+    ```javascript
+    User = Ohm.Model.extend({
+      createdAt: Ohm.attr('momentjs', {parseFormat: 'MM-DD-YY'})
+    });
 
-  user = User.create({createdAt: '7-7-85'});
-  user.get('createdAt'); // => moment.js object
-  user.serialize(); // => {createdAt: '1995-08-09T05:00:00.000Z'}
-  ```
+    user = User.create({createdAt: '7-7-85'});
+    user.get('createdAt'); // => moment.js object
+    user.serialize(); // => {createdAt: '1995-08-09T05:00:00.000Z'}
+    ```
 
 **Note**: The `context` variable is used just the object/record whose attribute
 is being transformed.
